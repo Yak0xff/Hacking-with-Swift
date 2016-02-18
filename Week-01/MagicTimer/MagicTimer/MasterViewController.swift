@@ -12,7 +12,21 @@ class MasterViewController: UITableViewController {
     
     var detailViewController: DetailViewController? = nil
 
-    let titles = ["Using existing UILabel, stopwatch", "Self as label, free styling just like usual", "Countdown Timer", "Stopwatch with controls and time format", "Countdown timer with controls", "Countdown finish callback with Delegate", "Countdown finish callback with block", "Change color when time > 10 sec", "Custom Text return from delegate", "Modify Stopwatch time", "Modify Timer time", "Count beyond 23 hour limit of HH", "Countdown timer in text"]
+    let titles = [
+        "Using existing UILabel, stopwatch",
+        "Self as label, free styling just like usual",
+        "Countdown Timer",
+        "Stopwatch with controls and time format",
+        "Countdown timer with controls",
+        "Countdown finish callback with Delegate",
+        "Countdown finish callback with block",
+        "Change color when time > 10 sec",
+        "Custom Text return from delegate",
+        "Modify Stopwatch time",
+        "Modify Timer time",
+        "Count beyond 23 hour limit of HH",
+        "Countdown timer in text"
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
