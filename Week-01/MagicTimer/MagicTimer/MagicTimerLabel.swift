@@ -29,10 +29,9 @@ protocol MagicTimerLabelDelegate {
     func customTextToDisplay(timerLabel: MagicTimerLabel,atTime: NSTimeInterval) -> String
 }
 
-
-public class MagicTimerLabel: UILabel {
+ class MagicTimerLabel: UILabel {
     
-    private let kDefaultTimeFormat = "HH:mm:ss"
+//    private let kDefaultTimeFormat = "HH:mm:ss"
     private let kHourFormatReplace = "!!!*"
     private let kDefaultFireIntervalNormal = 0.1
     private let kDefaultFireIntervalHighUse = 0.01
@@ -42,33 +41,18 @@ public class MagicTimerLabel: UILabel {
     var delegate: MagicTimerLabelDelegate?
     
  /// Time format wish to display in label
-    var timeFormat: String? {
-        set {
+    var timeFormat: String? = "HH:mm:ss" {
+        didSet {
             if let _ = timeFormat {
                 self.dateFormatter.dateFormat = timeFormat
             }
+            
             self.updateLabel()
-        }
-        get{
-            if self.timeFormat == nil {
-                self.timeFormat = kDefaultTimeFormat
-            }
-            return self.timeFormat
         }
     }
     
  /// Target label object, default self if you do not initWithLabel nor set
-    var timeLabel: UILabel?{
-        set {
-            self.timeLabel = newValue
-        }
-        get {
-            if let _ = self.timeLabel {
-                return self.timeLabel
-            }
-            return self
-        }
-    }
+    var timeLabel: UILabel?
     
  /// Used for replace text in range
     var textRange: NSRange?
@@ -111,13 +95,9 @@ public class MagicTimerLabel: UILabel {
     }
     
     
-    override init(frame: CGRect) {
+     init(frame: CGRect, label: UILabel? = nil, type: MagicTimerLabelType? = .StopWatch) {
         super.init(frame: frame)
-    }
-    
-   convenience  init(frame: CGRect, label: UILabel? = nil, type: MagicTimerLabelType? = .StopWatch) {
-       self.init()
-        timeLabel = label
+        timeLabel = label == nil ? self : label
         timerType = type!
     }
     
@@ -127,7 +107,7 @@ public class MagicTimerLabel: UILabel {
         }
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -204,9 +184,9 @@ public class MagicTimerLabel: UILabel {
             timer = nil
         }
         if self.timeFormat!.rangeOfString("SS") != nil {
-            timer = NSTimer.scheduledTimerWithTimeInterval(kDefaultFireIntervalHighUse, target: self, selector: "updateLabel", userInfo: nil, repeats: true)
+            timer = NSTimer.scheduledTimerWithTimeInterval(kDefaultFireIntervalHighUse, target: self, selector: Selector("updateLabel"), userInfo: nil, repeats: true)
         } else {
-            timer = NSTimer.scheduledTimerWithTimeInterval(kDefaultFireIntervalNormal, target: self, selector: "updateLabel", userInfo: nil, repeats: true)
+            timer = NSTimer.scheduledTimerWithTimeInterval(kDefaultFireIntervalNormal, target: self, selector: Selector("updateLabel"), userInfo: nil, repeats: true)
         }
         NSRunLoop.currentRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
         if startCountDate == nil {
@@ -251,7 +231,7 @@ public class MagicTimerLabel: UILabel {
         updateLabel()
     }
     
-    private func updateLabel() {
+     func updateLabel() {
         let timeDiff = NSDate().timeIntervalSinceDate(startCountDate!)
         var timeToShow = NSDate()
         var timerEnded = false
