@@ -232,7 +232,9 @@ protocol MagicTimerLabelDelegate {
     }
     
      func updateLabel() {
-        let timeDiff = NSDate().timeIntervalSinceDate(startCountDate!)
+        
+        let timeDiff = NSDate().timeIntervalSinceDate(startCountDate != nil ? startCountDate! : NSDate())
+        
         var timeToShow = NSDate()
         var timerEnded = false
         
