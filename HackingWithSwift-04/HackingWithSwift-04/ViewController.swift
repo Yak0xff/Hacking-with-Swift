@@ -14,6 +14,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
     
+    let websites = ["apple.com.cn", "robinchao.github.io"]
+    
     override func loadView() {
         webView = WKWebView()
         webView.navigationDelegate = self
@@ -24,7 +26,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let url = NSURL(string: "https://www.apple.com")!
+        let url = NSURL(string: "https://" + websites[0])!
         webView.loadRequest(NSURLRequest(URL: url))
         webView.allowsBackForwardNavigationGestures = true
         
@@ -54,8 +56,10 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     func openTapped() {
         let ac = UIAlertController(title: "Open Page", message: nil, preferredStyle: .ActionSheet)
-        ac.addAction(UIAlertAction(title: "apple.com.cn", style: .Default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "robinchao.github.io", style: .Default, handler: openPage))
+        
+        for website in websites {
+            ac.addAction(UIAlertAction(title: website, style: .Default, handler: openPage))
+        }
         ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         presentViewController(ac, animated: true, completion: nil)
     }
@@ -65,6 +69,19 @@ class ViewController: UIViewController, WKNavigationDelegate {
         webView.loadRequest(NSURLRequest(URL: url))
     }
     
+    
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.URL
+        
+        if let host = url!.host {
+            for website in websites {
+                if host.rangeOfString(website) != nil {
+                    decisionHandler(.Allow)
+                }
+            }
+        }
+        decisionHandler(.Cancel)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
