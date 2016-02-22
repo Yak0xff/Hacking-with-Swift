@@ -14,7 +14,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
     
-    let websites = ["apple.com.cn", "robinchao.github.io"]
+    let websites = ["apple.com", "google.cn"]
     
     override func loadView() {
         webView = WKWebView()
@@ -34,6 +34,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         
         progressView = UIProgressView(progressViewStyle: .Default)
+        progressView.progressTintColor = UIColor.grayColor()
+        progressView.trackTintColor = UIColor.redColor()
         progressView.sizeToFit()
         
         let progress = UIBarButtonItem(customView: progressView)
